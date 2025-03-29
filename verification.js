@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             
             setTimeout(() => {
                 if (confirm("Verifikasi berhasil! Tekan 'OK' untuk melanjutkan")) {
-                    window.location.replace("home.html"); 
+                    window.location.replace("claim.html"); 
                 }
             }, 2000);
         }
