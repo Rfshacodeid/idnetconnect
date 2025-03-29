@@ -3,208 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="assets/page1.png" type="image/x-icon"/>
-    <title>Security Check - System Verification</title>
+    <link rel="shortcut icon" href="//www.gstatic.com/images/branding/product/1x/gsa_32dp.png" type="image/png">
+    <title>Security Check - Google</title>
     <style>
         :root {
-            --primary: #2ecc71;
-            --secondary: #27ae60;
-            --background: #0a1929;
+            --google-blue: #1a73e8;
+            --google-green: #34a853;
+            --google-gray: #5f6368;
+            --background: #f8f9fa;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
         }
 
         body {
             background: var(--background);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            overflow: hidden;
+            padding: 2rem;
         }
 
-        .loading-container {
+        .security-card {
+            background: white;
+            max-width: 640px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            padding: 40px;
+            margin-top: 2rem;
             text-align: center;
-            padding: 3rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-            max-width: 480px;
-            width: 90%;
-            position: relative;
+        }
+
+        .google-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .google-logo {
+            width: 92px;
+            height: 30px;
+            margin-bottom: 1.5rem;
         }
 
         .security-badge {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            width: 96px;
+            height: 96px;
+            background: #e8f0fe;
             border-radius: 50%;
             margin: 0 auto 1.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: float 3s ease-in-out infinite;
         }
 
-        .security-badge svg {
-            width: 40px;
-            height: 40px;
-            fill: white;
+        .checkmark {
+            width: 48px;
+            height: 48px;
+            color: var(--google-green);
         }
 
         h1 {
-            color: white;
-            font-weight: 600;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.5px;
+            color: #202124;
+            font-weight: 500;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
         }
 
-        .spinner {
-            width: 48px;
-            height: 48px;
-            margin: 1rem auto;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            position: relative;
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: #e8eaed;
+            border-radius: 2px;
+            margin: 2rem 0;
+            overflow: hidden;
         }
 
-        .spinner::after {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top-color: var(--secondary);
-            animation: spin 1.5s linear infinite;
-        }
-
-        .progress-text {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            margin: 1.5rem 0;
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--google-green);
+            transition: width 0.3s ease;
         }
 
         .status-list {
             text-align: left;
-            margin-top: 1.5rem;
+            margin: 2rem 0;
         }
 
         .status-item {
             display: flex;
             align-items: center;
+            padding: 1rem;
+            border-radius: 8px;
             margin: 0.5rem 0;
-            color: rgba(255, 255, 255, 0.9);
+            background: #f8f9fa;
+            color: var(--google-gray);
             font-size: 0.95rem;
-            opacity: 0;
-            transform: translateY(10px);
-            animation: itemAppear 0.4s ease-out forwards;
+        }
+
+        .status-item.completed {
+            background: #e8f0fe;
+            color: #1967d2;
         }
 
         .status-item::before {
-            content: '✓';
-            color: var(--primary);
-            margin-right: 0.75rem;
-            font-weight: bold;
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 1rem;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="%235f6368" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .status-item.completed::before {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="%2334a853" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>');
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        .certificate-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: left;
         }
 
-        @keyframes itemAppear {
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .certificate-details p {
+            margin: 0.5rem 0;
+            color: var(--google-gray);
+            font-size: 0.9rem;
         }
 
-        .glow {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(46,204,113,0.2) 0%, rgba(46,204,113,0) 70%);
-            pointer-events: none;
+        .google-footer {
+            margin-top: auto;
+            padding: 2rem;
+            color: var(--google-gray);
+            font-size: 0.875rem;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="glow" style="top: 20%; left: 30%"></div>
-    <div class="glow" style="bottom: 20%; right: 30%"></div>
-    
-    <div class="loading-container">
+    <div class="google-header">
+        <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" 
+             alt="Google" class="google-logo">
+    </div>
+
+    <div class="security-card">
         <div class="security-badge">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+            <svg class="checkmark" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
             </svg>
         </div>
+
+        <h1>Verifikasi Keamanan Google</h1>
         
-        <h1>System Security Verification</h1>
-        
-        <div class="spinner"></div>
-        
-        <div class="progress-text">Initializing secure connection...</div>
-        
-        <div class="status-list">
-            <div class="status-item">Secure handshake completed</div>
-            <div class="status-item">TLS/SSL verification</div>
-            <div class="status-item">Malware scan finished</div>
-            <div class="status-item">Data encryption active</div>
-            <div class="status-item">Firewall check passed</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
         </div>
+
+        <div class="status-list">
+            <div class="status-item">Verifikasi identitas perangkat</div>
+            <div class="status-item">Pemeriksaan sertifikat keamanan</div>
+            <div class="status-item">Enkripsi koneksi aktif</div>
+            <div class="status-item">Proteksi malware aktif</div>
+            <div class="status-item">Verifikasi protokol HTTPS</div>
+        </div>
+
+        <div class="certificate-details">
+            <p><strong>Sertifikat Keamanan</strong></p>
+            <p>Diterbitkan oleh: Google Trust Services LLC</p>
+            <p>Valid hingga: 15 September 2025</p>
+            <p>Algoritma enkripsi: ECDSA Secp256r1</p>
+        </div>
+    </div>
+
+    <div class="google-footer">
+        © 2024 Google LLC - Perlindungan keamanan real-time aktif
     </div>
 
     <script>
         const statusItems = document.querySelectorAll('.status-item');
-        const messages = [
-            "Establishing secure connection...",
-            "Verifying system integrity...",
-            "Checking for vulnerabilities...",
-            "Authenticating credentials...",
-            "Finalizing security protocols..."
-        ];
+        const progressBar = document.getElementById('progressBar');
+        let progress = 0;
 
-        // Animate status items sequentially
+        const updateProgress = () => {
+            progress += 20;
+            progressBar.style.width = `${progress}%`;
+            
+            if(progress >= 100) {
+                clearInterval(progressInterval);
+                setTimeout(() => {
+                    window.location.href = "main.html";
+                }, 1500);
+            }
+        }
+
+        const progressInterval = setInterval(updateProgress, 2000);
+
         statusItems.forEach((item, index) => {
             setTimeout(() => {
-                item.style.animation = `itemAppear 0.4s ease-out ${index * 0.2}s forwards`;
-            }, index * 600);
+                item.classList.add('completed');
+            }, (index + 1) * 1700);
         });
-
-        // Update progress text dynamically
-        let currentMessage = 0;
-        const progressText = document.querySelector('.progress-text');
-        
-        const textInterval = setInterval(() => {
-            progressText.style.opacity = 0;
-            setTimeout(() => {
-                progressText.textContent = messages[currentMessage];
-                progressText.style.opacity = 1;
-                currentMessage = (currentMessage + 1) % messages.length;
-            }, 300);
-        }, 1500);
-
-        setTimeout(() => {
-            clearInterval(textInterval);
-            window.location.href = "main.html";
-        }, 10000);
     </script>
 </body>
 </html>
