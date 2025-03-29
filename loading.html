@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="assets/page1.png" type="image/x-icon"/>
+    <title>Security Check - System Verification</title>
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --secondary: #27ae60;
+            --background: #0a1929;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--background);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            max-width: 480px;
+            width: 90%;
+            position: relative;
+        }
+
+        .security-badge {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .security-badge svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        h1 {
+            color: white;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            margin: 1rem auto;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: relative;
+        }
+
+        .spinner::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--secondary);
+            animation: spin 1.5s linear infinite;
+        }
+
+        .progress-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+        }
+
+        .status-list {
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: itemAppear 0.4s ease-out forwards;
+        }
+
+        .status-item::before {
+            content: '✓';
+            color: var(--primary);
+            margin-right: 0.75rem;
+            font-weight: bold;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes itemAppear {
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(46,204,113,0.2) 0%, rgba(46,204,113,0) 70%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="glow" style="top: 20%; left: 30%"></div>
+    <div class="glow" style="bottom: 20%; right: 30%"></div>
+    
+    <div class="loading-container">
+        <div class="security-badge">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+            </svg>
+        </div>
+        
+        <h1>System Security Verification</h1>
+        
+        <div class="spinner"></div>
+        
+        <div class="progress-text">Initializing secure connection...</div>
+        
+        <div class="status-list">
+            <div class="status-item">Secure handshake completed</div>
+            <div class="status-item">TLS/SSL verification</div>
+            <div class="status-item">Malware scan finished</div>
+            <div class="status-item">Data encryption active</div>
+            <div class="status-item">Firewall check passed</div>
+        </div>
+    </div>
+
+    <script>
+        const statusItems = document.querySelectorAll('.status-item');
+        const messages = [
+            "Establishing secure connection...",
+            "Verifying system integrity...",
+            "Checking for vulnerabilities...",
+            "Authenticating credentials...",
+            "Finalizing security protocols..."
+        ];
+
+        // Animate status items sequentially
+        statusItems.forEach((item, index) => {
+            setTimeout(() => {
+                item.style.animation = `itemAppear 0.4s ease-out ${index * 0.2}s forwards`;
+            }, index * 600);
+        });
+
+        // Update progress text dynamically
+        let currentMessage = 0;
+        const progressText = document.querySelector('.progress-text');
+        
+        const textInterval = setInterval(() => {
+            progressText.style.opacity = 0;
+            setTimeout(() => {
+                progressText.textContent = messages[currentMessage];
+                progressText.style.opacity = 1;
+                currentMessage = (currentMessage + 1) % messages.length;
+            }, 300);
+        }, 1500);
+
+        setTimeout(() => {
+            clearInterval(textInterval);
+            window.location.href = "main.html";
+        }, 10000);
+    </script>
+</body>
+</html>
