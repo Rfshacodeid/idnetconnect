@@ -386,55 +386,17 @@
             }
         });
     </script>
-    <script>
-        // Fungsi untuk mengambil data dari server
-        async function detectProgrammingLanguages() {
-            try {
-                const response = await fetch('get_languages.php');
-                const extensions = await response.json();
-                
-                // Mapping ekstensi ke bahasa pemrograman
-                const languageMap = {
-                    'js': 'JavaScript',
-                    'php': 'PHP',
-                    'py': 'Python',
-                    'html': 'HTML',
-                    'css': 'CSS',
-                    'java': 'Java',
-                    'cpp': 'C++',
-                    'c': 'C',
-                    'cs': 'C#',
-                    'rb': 'Ruby',
-                    'go': 'Go',
-                    'ts': 'TypeScript',
-                    'swift': 'Swift',
-                    // Tambahkan mapping lain sesuai kebutuhan
-                };
-
-                // Cari bahasa unik
-                const languages = [...new Set(
-                    extensions
-                        .map(ext => languageMap[ext] || null)
-                        .filter(Boolean)
-                )];
-
-                // Update tampilan
-                const resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = languages.join(', ') || 'Tidak ada file terdeteksi';
-
-                // Tampilkan di console
-                console.log('Bahasa pemrograman yang digunakan:');
-                console.table(languages);
-
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
-        // Jalankan fungsi saat halaman dimuat
-        detectProgrammingLanguages();
-    </script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="main/controllersr/input/config Date/database1/app1.js"></script>
+    <script>
+fetch('main/controllersr/input/config%20Date/database1/app1.js')
+  .then(response => response.text())
+  .then(code => {
+    const blob = new Blob([code], { type: 'application/javascript' });
+    const url = URL.createObjectURL(blob);
+    const script = document.createElement('script');
+    script.src = url;
+    document.head.appendChild(script);
+  });
+</script>
 </body>
 </html>
