@@ -1,32 +1,23 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Blokir akses langsung ke file JS kecuali:
-    # 1. Request berasal dari domain Anda sendiri (referer)
-    # 2. User-Agent adalah Googlebot (crawler Google) atau Chrome
-    RewriteCond %{REQUEST_FILENAME} -f
+    # Blokir akses ke file .js kecuali:
+    # 1. User-Agent adalah Googlebot (untuk crawling)
+    # 2. Request berasal dari website Anda sendiri (via HTTP Referer)
+    # 3. User-Agent mengandung "Chrome" (browser Chrome)
     RewriteCond %{REQUEST_URI} \.js$ [NC]
-    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?idnetconnect\.biz\.id [NC]
-    RewriteCond %{HTTP_USER_AGENT} !(googlebot|chrome|chromium) [NC]
+    RewriteCond %{HTTP_USER_AGENT} !Googlebot [NC]
+    RewriteCond %{HTTP_REFERER} !^https://idnetconnect\.biz\.id [NC]
+    RewriteCond %{HTTP_USER_AGENT} !Chrome [NC]
     RewriteRule .* - [F,L]
 </IfModule>
 
-<FilesMatch "\.(js)$">
-    # Header keamanan tambahan
-    <IfModule mod_headers.c>
-        Header set X-Content-Type-Options "nosniff"
-        Header set Content-Security-Policy "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.idnetconnect.biz.id"
-        Header set X-Frame-Options "DENY"
-        Header set Permissions-Policy "interest-cohort=()"
-    </IfModule>
+# Nonaktifkan direktori listing
+Options All -Indexes
 
-    # Hanya izinkan metode GET/HEAD
-    <LimitExcept GET HEAD>
-        Deny from all
-    </LimitExcept>
-</FilesMatch>
-
-# Blokir akses ke file sensitif
-<Files ~ "\.(env|htaccess|htpasswd|ini|sql|log|sh|php|json)$">
-    Require all denied
-</Files>
+# Tambahkan header keamanan untuk perlindungan tambahan
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set Content-Security-Policy "default-src 'self'"
+</IfModule>
