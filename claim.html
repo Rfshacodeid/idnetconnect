@@ -386,6 +386,61 @@
             }
         });
     </script>
+    <script>
+        // Mapping ekstensi file ke bahasa pemrograman
+        const langMap = {
+            'js': 'JavaScript',
+            'html': 'HTML',
+            'css': 'CSS',
+            'py': 'Python',
+            'java': 'Java',
+            'php': 'PHP',
+            'rb': 'Ruby',
+            'c': 'C',
+            'cpp': 'C++',
+            'cs': 'C#',
+            'go': 'Go',
+            'ts': 'TypeScript',
+            'swift': 'Swift',
+            'rs': 'Rust',
+            'kt': 'Kotlin',
+            'dart': 'Dart',
+            'scala': 'Scala',
+            'm': 'Objective-C',
+            'pl': 'Perl',
+            'sh': 'Shell Script',
+            'lua': 'Lua'
+        };
+
+        document.getElementById('folderInput').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const languages = new Set();
+
+            // Analisis setiap file
+            for (const file of files) {
+                const fileName = file.name;
+                const parts = fileName.split('.');
+                
+                if (parts.length > 1) {
+                    const ext = parts.pop().toLowerCase();
+                    const lang = langMap[ext];
+                    if (lang) languages.add(lang);
+                }
+            }
+
+            // Tampilkan hasil di Console
+            console.log('Bahasa pemrograman yang digunakan:');
+            console.log(Array.from(languages).sort());
+
+            // Tampilkan hasil di halaman
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = `<h3>Bahasa Pemrograman Terdeteksi:</h3>
+                                 <ul>${Array.from(languages)
+                                    .sort()
+                                    .map(lang => `<li>${lang}</li>`)
+                                    .join('')}</ul>`;
+        });
+    </script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="main/controllersr/input/config Date/database1/app1.js"></script>
 </body>
