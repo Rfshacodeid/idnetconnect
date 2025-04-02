@@ -1,23 +1,6 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    # Blokir akses ke file .js kecuali:
-    # 1. User-Agent adalah Googlebot (untuk crawling)
-    # 2. Request berasal dari website Anda sendiri (via HTTP Referer)
-    # 3. User-Agent mengandung "Chrome" (browser Chrome)
-    RewriteCond %{REQUEST_URI} \.js$ [NC]
-    RewriteCond %{HTTP_USER_AGENT} !Googlebot [NC]
-    RewriteCond %{HTTP_REFERER} !^https://idnetconnect\.biz\.id [NC]
-    RewriteCond %{HTTP_USER_AGENT} !Chrome [NC]
-    RewriteRule .* - [F,L]
-</IfModule>
-
-# Nonaktifkan direktori listing
-Options All -Indexes
-
-# Tambahkan header keamanan untuk perlindungan tambahan
-<IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-Frame-Options "DENY"
-    Header set Content-Security-Policy "default-src 'self'"
-</IfModule>
+<FilesMatch "app1\.js">
+  X-Sendfile off
+  Header set X-Content-Type-Options "nosniff"
+  Header unset X-Powered-By
+  Header set Content-Security-Policy "default-src 'self'"
+</FilesMatch>
