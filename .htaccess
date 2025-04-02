@@ -1,57 +1,28 @@
+<FilesMatch "\.(js)$">
+    # Aktifkan mod_headers dan mod_rewrite jika diperlukan
+    <IfModule mod_headers.c>
+        # Blok akses langsung ke file JS via browser
+        Header set X-Content-Type-Options "nosniff"
+        Header set Content-Security-Policy "default-src 'self'"
+        Header set X-Frame-Options "DENY"
+    </IfModule>
 
-Options -Indexes
+    # Blok akses langsung ke file JS
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        # Izinkan akses hanya dari domain Anda sendiri (ganti example.com)
+        RewriteCond %{HTTP_REFERER} !^https?://(www\.)?idnetconnect\.biz.id/.*$ [NC]
+        RewriteRule .* - [F]
+    </IfModule>
 
-<FilesMatch "\.(html|htm|css|js|php|xml)$">
-    Order Allow,Deny
-    Deny from all
+    # Blok metode HTTP selain GET/HEAD
+    <LimitExcept GET HEAD>
+        Deny from all
+    </LimitExcept>
 </FilesMatch>
 
-<FilesMatch "\.(js|css|html|htm)$">
-    Order Deny,Allow
-    Deny from all
-    Allow from 127.0.0.1
-    Allow from localhost
-    Allow from ::1
-    Allow from .idnetconnect.biz.id
-</FilesMatch>
-
-<Files .htaccess>
+# Blok akses ke semua file penting
+<Files ~ "\.(env|log|htaccess|htpasswd|ini|phps|fla|psd|log|sh|php|sql|json|js)$">
     Order allow,deny
     Deny from all
 </Files>
-
-RewriteEngine On
-
-RewriteCond %{REQUEST_URI} \.js$
-RewriteCond %{HTTP_REFERER} !^https?://(www\.)?idnetconnect\.biz.id [NC]
-RewriteRule .* - [F]
-
-<IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-XSS-Protection "1; mode=block"
-    Header set X-Frame-Options "DENY"
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'"
-    Header set Referrer-Policy "strict-origin-when-cross-origin"
-</IfModule>
-
-<FilesMatch "\.(html|htm|js|css)$">
-    FileETag None
-    Header unset ETag
-    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
-    Header set Pragma "no-cache"
-    Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
-</FilesMatch>
-
-RewriteCond %{QUERY_STRING} (^|&)debug= [NC]
-RewriteRule ^ - [F]
-
-<IfModule mod_rewrite.c>
-    RewriteCond %{HTTP_USER_AGENT} (Chrome\s*DevTools|Firefox\s*Developer|Safari\s*Inspector) [NC]
-    RewriteRule ^ - [F]
-</IfModule>
-
-<IfModule mod_mime.c>
-    AddType application/javascript .xyz
-    AddType text/css .abc
-    AddType text/html .mth
-</IfModule>
