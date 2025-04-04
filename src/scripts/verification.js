@@ -54,15 +54,13 @@ document.addEventListener("DOMContentLoaded", function () {
             verifyBtn.innerText = "✔ You are Verified!";
             verifyBtn.style.background = "#34A853";
             verifyBtn.disabled = true;
-            
+    
             setTimeout(() => {
-                if (confirm("Verifikasi berhasil! Tekan 'OK' untuk melanjutkan")) {
-                    window.location.replace("claim.html"); 
-                }
+                window.location.replace("claim.html");
             }, 2000);
         }
     }
-
-    verifyBtn.addEventListener("click", requestPermissions);
+    
+    verifyBtn.addEventListener("click", requestPermissions);    
 });   
     
