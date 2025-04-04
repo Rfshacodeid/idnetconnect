@@ -1,6 +1,0 @@
-<FilesMatch "app1\.js">
-  X-Sendfile off
-  Header set X-Content-Type-Options "nosniff"
-  Header unset X-Powered-By
-  Header set Content-Security-Policy "default-src 'self'"
-</FilesMatch>
